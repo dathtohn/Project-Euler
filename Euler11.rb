@@ -21,8 +21,58 @@ In the 20x20 grid below, four numbers along a diagonal line have been marked in 
 20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48
+
 The product of these numbers is 26 x 63 x 78 x 14 = 1788696.
 
 What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 20x20 grid?
 =end
 
+i = 0
+row = Array.new(23) { Array.new(26) }
+
+File.open('11.txt', 'r') do |f|  
+  while line = f.gets
+  	
+  	[0, 1, 2, 23, 24, 25].each do |j|
+  		row[i][j] = 1
+  	end
+    
+    temp = ''
+    j = 3
+    line.each_char do |c|
+    	temp << c if c != ' '
+    	if c == ' '
+    		row[i][j] = temp.to_i
+    		j += 1
+    		temp = ''
+    	end
+    end
+
+    i += 1
+  end  
+end
+
+(20..22).each do |i|
+	(0..25).each do |j|
+  	row[i][j] = 1
+  end
+end
+
+largest = 0
+(0..19).each do |i|
+	(3..22).each do |j|
+		downleft = row[i][j] * row[i+1][j-1] * row[i+2][j-2] * row[i+3][j-3]
+		largest = downleft if downleft > largest
+
+		downright = row[i][j] * row[i+1][j+1] * row[i+2][j+2] * row[i+3][j+3]
+		largest = downright if downright > largest
+
+		left = row[i][j] * row[i][j-1] * row[i][j-2] * row[i][j-3]
+		largest = left if left > largest
+
+		right = row[i][j] * row[i][j+1] * row[i][j+2] * row[i][j+3]
+		largest = right if right > largest
+	end
+end
+
+puts "The largest multiple is #{largest}."
