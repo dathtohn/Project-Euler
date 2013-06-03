@@ -3,18 +3,22 @@
 # Find the last ten digits of the series, 11 + 22 + 33 + ... + 10001000.
 
 def modpower(base, exp)
-	return 1 if exp <= 0
-	while modpower > 1000000000 do
-		modpower / 10.00000
+	ans = 1
+	while exp >= 1 do
+		ans *= base
+		until ans.to_s.length <= 10 do
+			tempstr = ans.to_s
+			ans = tempstr[tempstr.length - 10, 10].to_i
+		end
+		exp -= 1
 	end
-	return base * modpower(base, exp-1)
+	return ans
 end
 
 sum = 0
-(1..10).each do |i|
+(1..1000).each do |i|
 	sum += modpower(i, i)
 end
 
 puts sum
-
-puts power(999, 50)
+puts sum.to_s[sum.to_s.length - 10, 10]
