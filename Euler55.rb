@@ -16,10 +16,28 @@
 
 # NOTE: Wording was modified slightly on 24 April 2007 to emphasise the theoretical nature of Lychrel numbers.
 
-num_arr = Array.new
-
-(0..100).each do |i|
-	number = i + 1
-	temp_arr = Array.new
-	while num_arr[i] == 
+def palindrome?(n)
+	return n.to_s == n.to_s.reverse
 end
+
+def palindrome_num(n)
+	return n.to_s.reverse.to_i
+end
+
+num_arr = Array.new(10001, false)
+
+(0..10000).each do |i|
+	iterations = 1
+	sum = i + palindrome_num(i)
+	while !palindrome?(sum) && iterations <= 50 do
+		sum = sum + palindrome_num(sum)
+		iterations += 1
+	end
+	num_arr[i] = true if palindrome?(sum)
+end
+
+num_of_lychrel = 0
+num_arr.map { |e| num_of_lychrel += 1 if e == false }
+
+puts num_of_lychrel
+# 249
